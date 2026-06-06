@@ -14,8 +14,8 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+JP:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=2" />
-    <script src="script.js?v=2" defer></script>
+    <link rel="stylesheet" href="styles.css?v=3" />
+    <script src="script.js?v=3" defer></script>
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
@@ -23,7 +23,7 @@
     <header class="site-header">
       <a class="logo" href="#top" aria-label="たま結 トップへ">
         <span>たま結</span>
-        <small>tatting lace</small>
+        <small>舟と癸の水面</small>
       </a>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">
         <span></span><span></span>
@@ -32,9 +32,9 @@
       <nav id="site-nav" class="site-nav" aria-label="メインナビゲーション">
         <a href="#works">works</a>
         <a href="#story">story</a>
-        <a href="#note">note</a>
-        <a class="nav-shop" href="https://example.base.shop" target="_blank" rel="noreferrer">
-          online shop
+        <a href="#origin">origin</a>
+        <a class="nav-shop" href="https://www.instagram.com/example" target="_blank" rel="noreferrer">
+          Instagram
         </a>
       </nav>
     </header>
@@ -51,14 +51,9 @@
           <a class="text-link" href="#works">作品を見る <span>↘</span></a>
         </div>
 
-        <div class="hero-visual reveal">
-          <div class="lace-art lace-art-large" aria-label="作品写真の仮スペース">
-            <div class="lace-ring ring-one"></div>
-            <div class="lace-ring ring-two"></div>
-            <div class="lace-ring ring-three"></div>
-            <div class="lace-ring ring-four"></div>
-          </div>
-          <p class="photo-note">photograph coming soon</p>
+        <div class="hero-visual hero-photo reveal">
+          <img src="photos/167628.jpg" alt="手のひらでやさしく持ち上げた、たま結のタティングレース作品" />
+          <p class="photo-note">Tamayui · since 2007</p>
         </div>
 
         <p class="hero-number" aria-hidden="true">01</p>
@@ -78,8 +73,8 @@
         <div class="work-grid">
           <article class="work-card work-card-tall reveal">
             <div class="work-image placeholder-a">
-              <div class="motif motif-flower"></div>
-              <span>your photograph / 01</span>
+              <img src="photos/167647.jpg" alt="淡い生成り色のタティングレースの耳飾り" />
+              <span>lace earrings / 01</span>
             </div>
             <div class="work-meta">
               <h3>花の耳飾り</h3>
@@ -88,8 +83,8 @@
           </article>
           <article class="work-card reveal">
             <div class="work-image placeholder-b">
-              <div class="motif motif-drop"></div>
-              <span>your photograph / 02</span>
+              <img src="photos/167632.jpg" alt="色とりどりのタティングレースをあしらった木製コースター" />
+              <span>lace coasters / 02</span>
             </div>
             <div class="work-meta">
               <h3>小さなドイリー</h3>
@@ -98,8 +93,8 @@
           </article>
           <article class="work-card reveal">
             <div class="work-image placeholder-c">
-              <div class="motif motif-loop"></div>
-              <span>your photograph / 03</span>
+              <img src="photos/167646.jpg" alt="古書に添えた濃紺のタティングレース作品" />
+              <span>beaded lace / 03</span>
             </div>
             <div class="work-meta">
               <h3>糸のブローチ</h3>
@@ -108,22 +103,12 @@
           </article>
         </div>
 
-        <div class="works-action reveal">
-          <a class="outline-button" href="https://example.base.shop" target="_blank" rel="noreferrer">
-            BASEで作品を見る <span>↗</span>
-          </a>
-          <small>販売中の作品はオンラインショップにて</small>
-        </div>
       </section>
 
       <section id="story" class="story">
-        <div class="story-visual reveal">
+        <div class="story-visual story-photo reveal">
           <span class="vertical-label">about the craft</span>
-          <div class="lace-art lace-art-small" aria-label="制作風景写真の仮スペース">
-            <div class="lace-ring ring-one"></div>
-            <div class="lace-ring ring-two"></div>
-            <div class="lace-ring ring-three"></div>
-          </div>
+          <img src="photos/167633.jpg" alt="タティングレース制作に使うシャトルと道具" />
         </div>
         <div class="story-copy reveal">
           <p class="eyebrow">My story</p>
@@ -143,34 +128,40 @@
         </div>
       </section>
 
-      <section id="note" class="note-gateway section-shell reveal">
-        <div class="note-copy">
-          <p class="eyebrow">Follow Tamayui</p>
-          <h2>糸のこと、<br /><em>日々のこと。</em></h2>
-          <p>
-            制作の途中で考えたことはnoteに。<br />
-            新しい作品や日々の様子はInstagramに載せています。
-          </p>
+      <section id="origin" class="origin section-shell">
+        <div class="origin-heading reveal">
+          <p class="eyebrow">The name, Tamayui</p>
+          <p class="origin-since">since 2007</p>
+          <h2>舟と癸の、<br /><em>静かな水面。</em></h2>
         </div>
-        <div class="social-links">
-          <a class="note-link" href="https://note.com/example" target="_blank" rel="noreferrer">
-            <span><small>Journal</small>noteを読む</span>
-            <strong>↗</strong>
-          </a>
-          <a class="note-link instagram-link" href="https://www.instagram.com/example" target="_blank" rel="noreferrer">
-            <span><small>Gallery & daily</small>Instagramを見る</span>
-            <strong>↗</strong>
-          </a>
+        <div class="origin-body reveal">
+          <p>
+            「結ぶ」という言葉には、人と人、想いと想い、過去と未来をつなぐ意味があります。
+            「Tamayui（たま結）」には、もうひとつ大切なイメージがあります。
+          </p>
+          <p class="origin-phrase">舟と癸（みずのと）の水面。</p>
+          <p>
+            静かな水面に浮かぶ小さな舟のように、流れに逆らわず、
+            けれど自分の行きたい方向へ進んでいくこと。
+          </p>
+          <p>
+            癸は、雨や露、湧き水のようなやさしい水。水面はレースそのもの、
+            舟はシャトルを表します。一つひとつの結び目が集まり、
+            静かな水面に広がる波紋のように、美しい模様を描いていきます。
+          </p>
+          <p>
+            静かな想いを込めて、作品づくりと教室活動を続けています。
+          </p>
         </div>
       </section>
 
       <section class="shop-banner reveal">
         <div>
-          <p class="eyebrow">Online shop</p>
-          <h2>暮らしのそばに、<br /><em>小さなレースを。</em></h2>
+          <p class="eyebrow">Instagram</p>
+          <h2>作品と、<br /><em>日々の記録。</em></h2>
         </div>
-        <a href="https://example.base.shop" target="_blank" rel="noreferrer">
-          <span>BASEへ</span>
+        <a href="https://www.instagram.com/example" target="_blank" rel="noreferrer">
+          <span>Instagramへ</span>
           <strong>↗</strong>
         </a>
       </section>
@@ -179,14 +170,12 @@
     <footer>
       <a class="logo footer-logo" href="#top">
         <span>たま結</span>
-        <small>tatting lace</small>
+        <small>舟と癸の水面</small>
       </a>
       <div class="footer-links">
-        <a href="https://example.base.shop" target="_blank" rel="noreferrer">BASE ↗</a>
-        <a href="https://note.com/example" target="_blank" rel="noreferrer">note ↗</a>
         <a href="https://www.instagram.com/example" target="_blank" rel="noreferrer">Instagram ↗</a>
       </div>
-      <p>© 2026 Tamayui</p>
+      <p>© Tamayui · since 2007</p>
     </footer>
   </body>
 </html>
