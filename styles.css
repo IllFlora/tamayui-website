@@ -749,15 +749,23 @@ footer > p {
 }
 
 @media (max-width: 900px) {
+  body.menu-open {
+    overflow: hidden;
+  }
+
   .site-header {
     position: fixed;
     padding: 18px 20px;
     background: rgba(246, 243, 236, 0.9);
-    backdrop-filter: blur(12px);
   }
 
   .logo span {
     font-size: 29px;
+  }
+
+  .site-header > .logo {
+    position: relative;
+    z-index: 2;
   }
 
   .menu-button {
@@ -792,6 +800,7 @@ footer > p {
 
   .site-nav {
     position: fixed;
+    z-index: 1;
     inset: 0;
     display: flex;
     align-items: center;
