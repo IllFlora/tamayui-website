@@ -86,7 +86,7 @@ body {
   inset: 0;
   background: var(--olive);
   transform: translateX(-100%);
-  animation: tie-thread 900ms ease forwards;
+  animation: tie-thread 1400ms ease forwards;
 }
 
 @keyframes tie-thread {

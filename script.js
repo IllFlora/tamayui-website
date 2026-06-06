@@ -13,9 +13,9 @@ if (loaderSeen) {
 } else {
   const hideLoader = () => loader.classList.add("done");
   window.addEventListener("load", () => {
-    window.setTimeout(hideLoader, 250);
+    window.setTimeout(hideLoader, 1200);
   });
-  window.setTimeout(hideLoader, 1400);
+  window.setTimeout(hideLoader, 1800);
 }
 
 const menuButton = document.querySelector(".menu-button");
