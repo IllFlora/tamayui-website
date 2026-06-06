@@ -666,6 +666,15 @@ em {
   padding: 110px 10vw;
 }
 
+.story-copy h2 {
+  font-size: clamp(31px, 3.4vw, 48px);
+}
+
+.story-copy h2 span,
+.story-copy h2 em {
+  white-space: nowrap;
+}
+
 .story-copy > p:not(.eyebrow) {
   max-width: 440px;
   color: #5f5f57;
@@ -694,6 +703,10 @@ em {
   font-size: 28px;
   font-style: italic;
   font-weight: 400;
+}
+
+.story-copy .text-link {
+  margin-top: 28px;
 }
 
 .origin {
