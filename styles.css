@@ -27,6 +27,74 @@ body {
   line-height: 1.9;
 }
 
+.page-loader {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 1;
+  visibility: visible;
+  background: var(--paper-light);
+  transition: opacity 650ms ease, visibility 650ms ease;
+}
+
+.page-loader.done,
+.page-loader.skip {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-loader.skip {
+  transition: none;
+}
+
+.loader-brand {
+  display: flex;
+  min-width: 180px;
+  align-items: center;
+  flex-direction: column;
+  color: var(--ink);
+}
+
+.loader-brand span {
+  font-size: 27px;
+  letter-spacing: 0.16em;
+}
+
+.loader-brand small {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 8px;
+  letter-spacing: 0.24em;
+}
+
+.loader-brand i {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-top: 25px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.loader-brand i::after {
+  position: absolute;
+  content: "";
+  inset: 0;
+  background: var(--olive);
+  transform: translateX(-100%);
+  animation: tie-thread 900ms ease forwards;
+}
+
+@keyframes tie-thread {
+  to {
+    transform: translateX(0);
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -228,7 +296,7 @@ em {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.72) sepia(0.08) contrast(0.94);
+  filter: none;
 }
 
 .hero-photo img {
@@ -426,7 +494,7 @@ em {
 
 .work-card:hover .work-image img {
   transform: scale(1.025);
-  filter: saturate(0.82) sepia(0.04) contrast(0.98);
+  filter: brightness(1.025);
 }
 
 .work-card-tall .work-image {
@@ -699,7 +767,7 @@ em {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.68) sepia(0.08) contrast(0.95);
+  filter: none;
 }
 
 .lesson-photo-main {
@@ -872,6 +940,17 @@ em {
   line-height: 0.75;
 }
 
+.thread-number strong small {
+  display: inline-block;
+  margin: 0 5px;
+  color: var(--muted);
+  font-family: var(--serif-jp);
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  vertical-align: middle;
+}
+
 .thread-number p {
   margin: 0;
   color: var(--muted);
@@ -879,6 +958,13 @@ em {
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
+}
+
+.swatch-note {
+  margin: 28px 0 -17px;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.09em;
 }
 
 .thread-swatches {
@@ -1289,5 +1375,9 @@ footer > p {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .page-loader {
+    display: none;
   }
 }
