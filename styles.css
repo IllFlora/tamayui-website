@@ -36,7 +36,7 @@ body {
   opacity: 1;
   visibility: visible;
   background: var(--paper-light);
-  transition: opacity 650ms ease, visibility 650ms ease;
+  transition: opacity 500ms ease, visibility 500ms ease;
 }
 
 .page-loader.done,
