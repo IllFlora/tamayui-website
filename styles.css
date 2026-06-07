@@ -1303,12 +1303,108 @@ footer > p {
 }
 
 @media (max-width: 620px) {
+  body {
+    line-height: 1.85;
+  }
+
   h1 {
     font-size: 35px;
   }
 
   h2 {
     font-size: 32px;
+  }
+
+  .hero-text br,
+  .lesson-intro br,
+  .social-guide br {
+    display: none;
+  }
+
+  .section-shell {
+    position: relative;
+    padding-top: 92px;
+    border-top: 1px solid rgba(41, 42, 37, 0.16);
+  }
+
+  .section-shell::before,
+  .story-copy::before,
+  .lesson-copy::before,
+  .shop-banner::before {
+    display: block;
+    width: fit-content;
+    margin-bottom: 26px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid rgba(41, 42, 37, 0.35);
+    color: var(--muted);
+    font-family: var(--serif-en);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .works::before {
+    content: "01 / Works";
+  }
+
+  .story-copy,
+  .lesson-copy,
+  .shop-banner {
+    position: relative;
+    border-top: 1px solid rgba(41, 42, 37, 0.16);
+  }
+
+  .story-copy::before {
+    content: "02 / Story";
+  }
+
+  .origin::before {
+    content: "03 / Origin";
+  }
+
+  .lesson-copy::before {
+    content: "04 / Lessons";
+  }
+
+  .thread-order::before {
+    content: "05 / Order";
+  }
+
+  .shop-banner::before {
+    content: "06 / Links";
+  }
+
+  .section-heading {
+    margin-bottom: 46px;
+  }
+
+  .section-heading > p:last-child,
+  .thread-heading > p,
+  .social-guide,
+  .lesson-intro,
+  .story-copy > p:not(.eyebrow),
+  .origin-body p {
+    font-size: 14px;
+    letter-spacing: 0.035em;
+    line-height: 2;
+  }
+
+  .section-heading > p:last-child,
+  .thread-heading > p,
+  .social-guide,
+  .lesson-intro {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(41, 42, 37, 0.14);
+  }
+
+  .section-heading h2,
+  .story-copy h2,
+  .origin-heading h2,
+  .lesson-copy h2,
+  .thread-heading h2,
+  .shop-banner h2 {
+    margin-bottom: 0;
   }
 
   .hero-copy {
@@ -1338,8 +1434,31 @@ footer > p {
     min-height: 100vw;
   }
 
+  .story-copy {
+    padding-top: 82px;
+  }
+
+  .story-copy .eyebrow,
+  .lesson-copy .eyebrow,
+  .shop-banner .eyebrow {
+    margin-bottom: 12px;
+  }
+
+  .origin-body .origin-phrase {
+    margin: 34px 0;
+    padding: 20px 0;
+    border-top: 1px solid rgba(41, 42, 37, 0.15);
+    border-bottom: 1px solid rgba(41, 42, 37, 0.15);
+    font-size: 21px;
+    letter-spacing: 0.1em;
+  }
+
   .lesson-gallery {
     min-height: 110vw;
+  }
+
+  .lesson-gallery > p {
+    display: none;
   }
 
   .lesson-photo-main {
