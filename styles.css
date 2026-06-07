@@ -1031,7 +1031,20 @@ em {
   color: #ddd1b9;
 }
 
-.shop-banner > a {
+.social-guide {
+  max-width: 560px;
+  margin: 28px 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 2;
+}
+
+.social-links {
+  display: flex;
+  gap: 18px;
+}
+
+.social-links a {
   display: flex;
   width: 175px;
   aspect-ratio: 1;
@@ -1043,18 +1056,32 @@ em {
   transition: color 250ms ease, background 250ms ease, transform 250ms ease;
 }
 
-.shop-banner > a:hover {
+.social-links a:hover {
   color: var(--olive);
   background: var(--paper-light);
   transform: rotate(-8deg);
 }
 
-.shop-banner > a span {
+.social-links a small {
+  max-width: 125px;
+  margin-bottom: 10px;
+  color: #ddd1b9;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.social-links a:hover small {
+  color: var(--olive);
+}
+
+.social-links a span {
   font-size: 13px;
   letter-spacing: 0.16em;
 }
 
-.shop-banner > a strong {
+.social-links a strong {
   margin-top: 7px;
   font-size: 19px;
   font-weight: 300;
@@ -1270,7 +1297,7 @@ footer > p {
     padding: 80px 8vw;
   }
 
-  .shop-banner > a {
+  .social-links a {
     width: 140px;
   }
 }
@@ -1348,7 +1375,13 @@ footer > p {
     flex-direction: column;
   }
 
-  .shop-banner > a {
+  .social-links {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .social-links a {
     width: 100%;
     aspect-ratio: auto;
     align-items: center;
@@ -1358,7 +1391,13 @@ footer > p {
     border-radius: 0;
   }
 
-  .shop-banner > a strong {
+  .social-links a small {
+    max-width: none;
+    margin: 0;
+    text-align: left;
+  }
+
+  .social-links a strong {
     margin-top: 0;
   }
 
