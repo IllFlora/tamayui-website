@@ -853,6 +853,11 @@ em {
   line-height: 1.9;
 }
 
+.lesson-place-list {
+  display: grid;
+  row-gap: 16px;
+}
+
 .lesson-place a {
   transition: opacity 180ms ease;
 }
