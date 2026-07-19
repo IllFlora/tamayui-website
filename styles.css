@@ -2,7 +2,7 @@
   --paper: #eeeae1;
   --paper-light: #f6f3ec;
   --ink: #292a25;
-  --muted: #747267;
+  --muted: #69685f;
   --olive: #777b67;
   --clay: #aa765f;
   --line: rgba(41, 42, 37, 0.19);
@@ -25,74 +25,6 @@ body {
   font-family: var(--serif-jp);
   font-weight: 300;
   line-height: 1.9;
-}
-
-.page-loader {
-  position: fixed;
-  z-index: 100;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  opacity: 1;
-  visibility: visible;
-  background: var(--paper-light);
-  transition: opacity 500ms ease, visibility 500ms ease;
-}
-
-.page-loader.done,
-.page-loader.skip {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.page-loader.skip {
-  transition: none;
-}
-
-.loader-brand {
-  display: flex;
-  min-width: 180px;
-  align-items: center;
-  flex-direction: column;
-  color: var(--ink);
-}
-
-.loader-brand span {
-  font-size: 27px;
-  letter-spacing: 0.16em;
-}
-
-.loader-brand small {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 8px;
-  letter-spacing: 0.24em;
-}
-
-.loader-brand i {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: 1px;
-  margin-top: 25px;
-  overflow: hidden;
-  background: var(--line);
-}
-
-.loader-brand i::after {
-  position: absolute;
-  content: "";
-  inset: 0;
-  background: var(--olive);
-  transform: translateX(-100%);
-  animation: tie-thread 1400ms ease forwards;
-}
-
-@keyframes tie-thread {
-  to {
-    transform: translateX(0);
-  }
 }
 
 a {
@@ -249,12 +181,25 @@ em {
 
 .text-link {
   display: inline-flex;
+  min-height: 44px;
   align-items: center;
   gap: 42px;
-  padding-bottom: 6px;
+  padding: 8px 0;
   border-bottom: 1px solid var(--ink);
   font-size: 13px;
   letter-spacing: 0.13em;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+
+.hero-secondary-link {
+  color: var(--muted);
+  border-bottom-color: var(--line);
+  font-size: 12px;
 }
 
 .text-link span {
@@ -266,28 +211,22 @@ em {
   transform: translate(3px, 3px);
 }
 
+.text-link:active {
+  opacity: 0.62;
+}
+
+.menu-button:active,
+.outline-button:active,
+.social-links a:active {
+  transform: scale(0.98);
+}
+
 .hero-visual {
   position: relative;
   display: grid;
   place-items: center;
   overflow: hidden;
   background: #9a9b8b;
-}
-
-.hero-visual::before,
-.story-visual::before {
-  position: absolute;
-  content: "";
-  inset: 0;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.23), transparent 35%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(20, 25, 17, 0.2));
-}
-
-.hero-photo::before,
-.story-photo::before {
-  z-index: 1;
-  background: linear-gradient(145deg, rgba(95, 100, 84, 0.12), rgba(34, 39, 31, 0.24));
-  pointer-events: none;
 }
 
 .hero-photo img,
@@ -399,7 +338,7 @@ em {
   right: 30px;
   bottom: 20px;
   margin: 0;
-  color: rgba(255, 255, 255, 0.68);
+  color: rgba(41, 42, 37, 0.62);
   font-family: var(--serif-en);
   font-size: 10px;
   letter-spacing: 0.22em;
@@ -489,12 +428,11 @@ em {
 .work-image img {
   position: absolute;
   inset: 0;
-  transition: transform 600ms ease, filter 600ms ease;
+  transition: transform 600ms ease;
 }
 
 .work-card:hover .work-image img {
   transform: scale(1.025);
-  filter: brightness(1.025);
 }
 
 .work-card-tall .work-image {
@@ -853,6 +791,23 @@ em {
   line-height: 1.9;
 }
 
+.lesson-actions {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.lesson-contact-note {
+  max-width: 460px;
+  margin: 28px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.055em;
+  line-height: 2;
+}
+
 .lesson-place-list {
   display: grid;
   row-gap: 16px;
@@ -1125,8 +1080,8 @@ footer > p {
 
 .reveal {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 800ms ease, transform 800ms ease;
+  transform: translateY(16px);
+  transition: opacity 480ms ease, transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .reveal.visible {
@@ -1143,6 +1098,7 @@ footer > p {
     position: fixed;
     padding: 18px 20px;
     background: rgba(246, 243, 236, 0.9);
+    backdrop-filter: blur(14px) saturate(130%);
   }
 
   .logo span {
@@ -1158,20 +1114,21 @@ footer > p {
     position: relative;
     z-index: 2;
     display: flex;
-    width: 36px;
-    height: 30px;
+    width: 44px;
+    height: 44px;
     justify-content: center;
     flex-direction: column;
     gap: 7px;
-    padding: 5px;
+    padding: 8px;
     border: 0;
     background: none;
   }
 
   .menu-button span:not(.sr-only) {
     display: block;
-    width: 100%;
+    width: 28px;
     height: 1px;
+    align-self: center;
     background: var(--ink);
     transition: transform 200ms ease;
   }
@@ -1194,14 +1151,16 @@ footer > p {
     flex-direction: column;
     gap: 22px;
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
     background: var(--paper-light);
     font-size: 24px;
-    transition: opacity 220ms ease;
+    transition: opacity 220ms ease, visibility 220ms ease;
   }
 
   .site-nav.open {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
   }
 
@@ -1416,6 +1375,10 @@ footer > p {
     min-height: 620px;
   }
 
+  .hero-actions {
+    gap: 8px 22px;
+  }
+
   .hero-visual {
     min-height: 450px;
   }
@@ -1480,6 +1443,10 @@ footer > p {
   .lesson-place {
     grid-template-columns: 1fr;
     gap: 3px;
+  }
+
+  .lesson-contact-note {
+    font-size: 13px;
   }
 
   .thread-card {
@@ -1553,7 +1520,28 @@ footer > p {
     transition: none;
   }
 
-  .page-loader {
-    display: none;
+  .text-link:hover span,
+  .work-card:hover .work-image img,
+  .social-links a:hover {
+    transform: none;
+  }
+
+  .menu-button span:not(.sr-only) {
+    transition: none;
+  }
+
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background: var(--paper-light);
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --muted: #4f504a;
+    --line: rgba(41, 42, 37, 0.42);
   }
 }

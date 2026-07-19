@@ -1,51 +1,46 @@
-const loader = document.querySelector(".page-loader");
-let loaderSeen = false;
-
-try {
-  loaderSeen = sessionStorage.getItem("tamayui-loader-seen") === "true";
-  sessionStorage.setItem("tamayui-loader-seen", "true");
-} catch {
-  loaderSeen = false;
-}
-
-if (loaderSeen) {
-  loader.classList.add("skip");
-} else {
-  const hideLoader = () => loader.classList.add("done");
-  window.addEventListener("load", () => {
-    window.setTimeout(hideLoader, 1200);
-  });
-  window.setTimeout(hideLoader, 1800);
-}
-
 const menuButton = document.querySelector(".menu-button");
 const navigation = document.querySelector(".site-nav");
+const menuLabel = menuButton.querySelector(".sr-only");
+
+const setMenuOpen = (isOpen) => {
+  menuButton.setAttribute("aria-expanded", String(isOpen));
+  menuLabel.textContent = isOpen ? "メニューを閉じる" : "メニューを開く";
+  navigation.classList.toggle("open", isOpen);
+  document.body.classList.toggle("menu-open", isOpen);
+};
 
 menuButton.addEventListener("click", () => {
   const isOpen = menuButton.getAttribute("aria-expanded") === "true";
-  menuButton.setAttribute("aria-expanded", String(!isOpen));
-  navigation.classList.toggle("open", !isOpen);
-  document.body.classList.toggle("menu-open", !isOpen);
+  setMenuOpen(!isOpen);
 });
 
 navigation.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
-    menuButton.setAttribute("aria-expanded", "false");
-    navigation.classList.remove("open");
-    document.body.classList.remove("menu-open");
+    setMenuOpen(false);
   });
 });
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || menuButton.getAttribute("aria-expanded") !== "true") return;
+  setMenuOpen(false);
+  menuButton.focus();
+});
+
+const revealElements = document.querySelectorAll(".reveal");
+
+if (!("IntersectionObserver" in window)) {
+  revealElements.forEach((element) => element.classList.add("visible"));
+} else {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
         entry.target.classList.add("visible");
         observer.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.12 },
-);
+      });
+    },
+    { rootMargin: "0px 0px 15%", threshold: 0.01 },
+  );
 
-document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+  revealElements.forEach((element) => observer.observe(element));
+}

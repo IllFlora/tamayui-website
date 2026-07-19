@@ -62,19 +62,10 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+JP:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=12" />
-    <script src="script.js?v=9" defer></script>
+    <link rel="stylesheet" href="styles.css?v=14" />
+    <script src="script.js?v=10" defer></script>
   </head>
   <body>
-    <div class="page-loader" aria-hidden="true">
-      <div class="loader-brand">
-        <span>たま結</span>
-        <small>舟と癸の水面</small>
-        <i></i>
-      </div>
-    </div>
-    <div class="grain" aria-hidden="true"></div>
-
     <header class="site-header">
       <a class="logo" href="#top" aria-label="たま結 トップへ">
         <span>たま結</span>
@@ -98,18 +89,27 @@
 
     <main>
       <section id="top" class="hero">
-        <div class="hero-copy reveal">
+        <div class="hero-copy">
           <p class="eyebrow">Tatting lace, made slowly</p>
           <h1>糸を結んで、<br /><em>小さな余白</em>をつくる。</h1>
           <p class="hero-text">
             暮らしの合間に、ひとつずつ。<br />
             好きだから続けている、タティングレースの記録です。
           </p>
-          <a class="text-link" href="#works">作品を見る <span>↘</span></a>
+          <div class="hero-actions">
+            <a class="text-link" href="#works">作品を見る <span>↘</span></a>
+            <a class="text-link hero-secondary-link" href="#lessons">教室について <span>↘</span></a>
+          </div>
         </div>
 
-        <div class="hero-visual hero-photo reveal">
-          <img src="images/processed/167628.jpg" alt="手のひらでやさしく持ち上げた、たま結のタティングレース作品" />
+        <div class="hero-visual hero-photo">
+          <img
+            src="photos/167628.jpg"
+            width="961"
+            height="1213"
+            alt="手のひらでやさしく持ち上げた、たま結のタティングレース作品"
+            fetchpriority="high"
+          />
           <p class="photo-note">Tamayui · since 2008</p>
         </div>
 
@@ -130,7 +130,7 @@
         <div class="work-grid">
           <article class="work-card work-card-tall reveal">
             <div class="work-image placeholder-a">
-              <img src="images/processed/167647.jpg" alt="淡い生成り色のタティングレースの耳飾り" />
+              <img src="photos/167647.jpg" width="960" height="1706" alt="淡い生成り色のタティングレースの耳飾り" loading="lazy" decoding="async" />
               <span>Tamayui / 01</span>
             </div>
             <div class="work-meta">
@@ -140,7 +140,7 @@
           </article>
           <article class="work-card reveal">
             <div class="work-image placeholder-b">
-              <img src="images/processed/167632.jpg" alt="色とりどりのタティングレースをあしらった木製コースター" />
+              <img src="photos/167632.jpg" width="1105" height="1482" alt="色とりどりのタティングレースをあしらった木製コースター" loading="lazy" decoding="async" />
               <span>Tamayui / 02</span>
             </div>
             <div class="work-meta">
@@ -150,7 +150,7 @@
           </article>
           <article class="work-card reveal">
             <div class="work-image placeholder-c">
-              <img src="images/processed/167646.jpg" alt="古書に添えた濃紺のタティングレース作品" />
+              <img src="photos/167646.jpg" width="1108" height="1477" alt="古書に添えた濃紺のタティングレース作品" loading="lazy" decoding="async" />
               <span>Tamayui / 03</span>
             </div>
             <div class="work-meta">
@@ -160,12 +160,19 @@
           </article>
         </div>
 
+        <div class="works-action reveal">
+          <a class="outline-button" href="works.html">
+            作品をもっと見る <span>→</span>
+          </a>
+          <small>More works · a quiet collection</small>
+        </div>
+
       </section>
 
       <section id="story" class="story">
         <div class="story-visual story-photo reveal">
           <span class="vertical-label">about the craft</span>
-          <img src="images/processed/167633.jpg" alt="タティングレース制作に使うシャトルと道具" />
+          <img src="photos/167633.jpg" width="980" height="1671" alt="タティングレース制作に使うシャトルと道具" loading="lazy" decoding="async" />
         </div>
         <div class="story-copy reveal">
           <p class="eyebrow">My story</p>
@@ -221,10 +228,10 @@
       <section id="lessons" class="lessons">
         <div class="lesson-gallery reveal">
           <div class="lesson-photo lesson-photo-main">
-            <img src="images/processed/167625.jpg" alt="手のひらにのせたタティングレースの作品" />
+            <img src="lesson-photos/169935.jpg" width="1006" height="1257" alt="手のひらにのせた紅白のタティングレース作品" loading="lazy" decoding="async" />
           </div>
           <div class="lesson-photo lesson-photo-sub">
-            <img src="images/processed/167620.jpg" alt="タティングレース教室で作る大小の花モチーフ" />
+            <img src="lesson-photos/167620.jpg" width="1140" height="1186" alt="タティングレース教室で作る大小の花モチーフ" loading="lazy" decoding="async" />
           </div>
           <p>small lessons, made together</p>
         </div>
@@ -258,9 +265,18 @@
               <p>ご希望の場所へ出張レッスン</p>
             </div>
           </div>
-          <a class="text-link" href="https://www.instagram.com/tamayui_tatting/" target="_blank" rel="noreferrer">
-            レッスンについて相談する <span>↗</span>
-          </a>
+          <div class="lesson-actions">
+            <a class="text-link" href="lessons.html">
+              教室の風景を見る <span>→</span>
+            </a>
+            <a class="text-link" href="https://www.instagram.com/tamayui_tatting/" target="_blank" rel="noreferrer">
+              教室の参加についてDMで相談する <span>↗</span>
+            </a>
+          </div>
+          <p class="lesson-contact-note">
+            開催日・料金・持ち物などはInstagramのDMでご案内します。<br />
+            「教室希望」と、希望地域がお決まりであれば添えてお送りください。
+          </p>
         </div>
       </section>
 
