@@ -242,6 +242,67 @@ figure {
   justify-self: center;
 }
 
+.student-feature {
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 2.2vw;
+  margin-bottom: 10vh;
+}
+
+.student-feature figure {
+  min-height: 0;
+  overflow: hidden;
+  background: #e9e4da;
+}
+
+.student-feature-main {
+  grid-row: 1 / 3;
+  height: min(74vw, 900px);
+}
+
+.student-feature-side {
+  height: min(35.9vw, 438px);
+}
+
+.student-feature img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-feature-side:last-child img {
+  object-position: center 58%;
+}
+
+.student-invitation {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 8vw;
+  margin: 0 0 12vh;
+  padding: 0 0 42px;
+  border-bottom: 1px solid var(--line);
+}
+
+.student-invitation p {
+  margin: 0;
+  font-size: clamp(24px, 3.4vw, 46px);
+  letter-spacing: 0.1em;
+  line-height: 1.75;
+}
+
+.student-invitation a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 8px 0;
+  border-bottom: 1px solid currentColor;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+}
+
 .student-wall {
   columns: 3;
   column-gap: 2.2vw;
@@ -411,6 +472,42 @@ figure {
   .student-wall {
     columns: 2;
     column-gap: 12px;
+  }
+
+  .student-feature {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto auto;
+    gap: 12px;
+    margin-bottom: 72px;
+  }
+
+  .student-feature-main {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .student-feature-side {
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .student-invitation {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 72px;
+    padding-bottom: 32px;
+  }
+
+  .student-invitation p {
+    font-size: clamp(22px, 6.8vw, 30px);
+    letter-spacing: 0.06em;
+  }
+
+  .student-invitation a {
+    width: 100%;
+    gap: 20px;
   }
 
   .student-piece {
