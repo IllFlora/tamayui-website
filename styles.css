@@ -91,7 +91,7 @@ a {
 .site-nav {
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 30px;
   font-family: var(--serif-en);
   font-size: 17px;
   letter-spacing: 0.08em;
@@ -197,8 +197,8 @@ em {
 }
 
 .hero-secondary-link {
-  color: var(--muted);
-  border-bottom-color: var(--line);
+  color: var(--clay);
+  border-bottom-color: var(--clay);
   font-size: 12px;
 }
 
@@ -798,6 +798,40 @@ em {
   gap: 22px;
 }
 
+.lesson-action-label {
+  margin: 0 0 -10px;
+  color: var(--muted);
+  font-family: var(--serif-en);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.lesson-gallery-actions {
+  display: grid;
+  width: min(100%, 460px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+}
+
+.lesson-gallery-actions .text-link {
+  width: 100%;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 14px 14px 0;
+  font-size: 12px;
+}
+
+.lesson-gallery-actions .text-link + .text-link {
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+
+.lesson-consult-link {
+  color: var(--clay);
+  border-bottom-color: var(--clay);
+}
+
 .lesson-contact-note {
   max-width: 460px;
   margin: 28px 0 0;
@@ -1001,6 +1035,7 @@ em {
 
 .social-links {
   display: flex;
+  align-items: center;
   gap: 18px;
 }
 
@@ -1014,6 +1049,16 @@ em {
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 50%;
   transition: color 250ms ease, background 250ms ease, transform 250ms ease;
+}
+
+.social-links .social-link-main {
+  width: 195px;
+  border-color: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.social-links .social-link-main small {
+  color: var(--paper-light);
 }
 
 .social-links a:hover {
@@ -1062,11 +1107,20 @@ footer {
 .footer-links {
   display: flex;
   justify-self: center;
-  gap: 30px;
+  gap: 24px;
   color: var(--muted);
   font-family: var(--serif-en);
   font-size: 13px;
   letter-spacing: 0.1em;
+}
+
+.footer-links a {
+  white-space: nowrap;
+}
+
+.footer-links .footer-line {
+  color: var(--ink);
+  border-bottom: 1px solid currentColor;
 }
 
 footer > p {
@@ -1257,12 +1311,23 @@ footer > p {
   }
 
   .shop-banner {
+    align-items: flex-start;
+    flex-direction: column;
     gap: 45px;
     padding: 80px 8vw;
   }
 
+  .social-links {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
   .social-links a {
     width: 140px;
+  }
+
+  .social-links .social-link-main {
+    width: 158px;
   }
 }
 
@@ -1480,6 +1545,11 @@ footer > p {
     flex-direction: row;
     padding: 20px 25px;
     border-radius: 0;
+  }
+
+  .social-links .social-link-main {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.12);
   }
 
   .social-links a small {

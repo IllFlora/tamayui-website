@@ -205,10 +205,69 @@ img {
   font-weight: 300;
 }
 
+.gallery-next-rooms {
+  width: min(100%, 960px);
+  margin-bottom: 56px;
+}
+
+.gallery-next-rooms > p {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-family: var(--serif-en);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.gallery-next-rooms > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+
+.gallery-next-rooms a {
+  display: grid;
+  min-height: 150px;
+  grid-template-columns: 1fr auto;
+  align-content: space-between;
+  gap: 26px;
+  padding: 24px 28px;
+  transition: color 180ms ease, background 180ms ease;
+}
+
+.gallery-next-rooms a + a {
+  border-left: 1px solid var(--ink);
+}
+
+.gallery-next-rooms small {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-family: var(--serif-en);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gallery-next-rooms strong {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0.14em;
+}
+
+.gallery-next-rooms a:hover {
+  color: var(--ivory-light);
+  background: var(--ink);
+}
+
+.gallery-next-rooms a:hover small {
+  color: rgba(248, 245, 238, 0.62);
+}
+
 .gallery-actions {
   display: grid;
-  width: min(100%, 720px);
-  grid-template-columns: 1fr 1fr;
+  width: min(100%, 960px);
+  grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid var(--ink);
 }
 
@@ -217,18 +276,13 @@ img {
   min-height: 48px;
   align-items: center;
   justify-content: space-between;
-  padding: 22px 0;
+  padding: 22px 25px;
   border-bottom: 1px solid var(--ink);
   font-size: 12px;
   letter-spacing: 0.1em;
 }
 
-.gallery-actions a:first-child {
-  padding-right: 25px;
-}
-
-.gallery-actions a:last-child {
-  padding-left: 25px;
+.gallery-actions a + a {
   border-left: 1px solid var(--ink);
 }
 
@@ -334,13 +388,35 @@ img {
     font-size: 32px;
   }
 
+  .gallery-next-rooms {
+    margin-bottom: 46px;
+  }
+
+  .gallery-next-rooms > div {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-next-rooms a {
+    min-height: 122px;
+    padding: 20px 0;
+  }
+
+  .gallery-next-rooms a + a {
+    border-top: 1px solid rgba(41, 42, 37, 0.24);
+    border-left: 0;
+  }
+
   .gallery-actions {
     grid-template-columns: 1fr;
   }
 
-  .gallery-actions a:first-child,
-  .gallery-actions a:last-child {
+  .gallery-actions a {
     padding: 20px 0;
+    border-left: 0;
+  }
+
+  .gallery-actions a + a {
+    border-top: 0;
     border-left: 0;
   }
 
