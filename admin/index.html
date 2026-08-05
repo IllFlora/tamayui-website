@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="theme-color" content="#252720" />
+    <title>たま結 管理室</title>
+    <link rel="icon" type="image/png" href="../logo.png" />
+    <link rel="stylesheet" href="admin.css?v=1" />
+    <script src="admin.js?v=1" defer></script>
+  </head>
+  <body>
+    <header class="admin-header">
+      <div class="admin-brand">
+        <img src="../logo.png" width="44" height="44" alt="" />
+        <div>
+          <p>Tamayui private room</p>
+          <h1>たま結 管理室</h1>
+        </div>
+      </div>
+      <a href="../index.html" target="_blank" rel="noreferrer">公開サイトを見る <span>↗</span></a>
+    </header>
+
+    <main class="admin-shell">
+      <section id="connection-status" class="connection-status" aria-live="polite">
+        <span class="status-dot"></span>
+        <p>管理データへ接続しています</p>
+      </section>
+
+      <nav class="admin-tabs" aria-label="管理機能">
+        <button class="is-active" type="button" data-tab="photos" aria-controls="photos-panel" aria-selected="true">
+          <span>01</span> 写真
+        </button>
+        <button type="button" data-tab="analytics" aria-controls="analytics-panel" aria-selected="false">
+          <span>02</span> アクセス
+        </button>
+      </nav>
+
+      <section id="photos-panel" class="admin-panel" data-panel="photos">
+        <header class="panel-heading">
+          <div>
+            <p>Gallery management</p>
+            <h2>写真を展示室へ追加</h2>
+          </div>
+          <p>色加工やトリミングは行わず、表示に必要な軽量化だけを自動で行います。</p>
+        </header>
+
+        <section class="upload-card">
+          <fieldset class="collection-picker">
+            <legend>追加する場所</legend>
+            <label>
+              <input type="radio" name="upload-collection" value="works" checked />
+              <span><small>作家作品</small>More Works</span>
+            </label>
+            <label>
+              <input type="radio" name="upload-collection" value="classroom" />
+              <span><small>教室の様子</small>Lessons</span>
+            </label>
+            <label>
+              <input type="radio" name="upload-collection" value="students" />
+              <span><small>生徒作品</small>Students</span>
+            </label>
+          </fieldset>
+
+          <label id="drop-zone" class="drop-zone" for="photo-input">
+            <input id="photo-input" type="file" accept="image/*" multiple />
+            <span class="drop-icon" aria-hidden="true">＋</span>
+            <strong>写真を選ぶ</strong>
+            <small>複数枚まとめて選択できます</small>
+          </label>
+
+          <div id="upload-queue" class="upload-queue" aria-live="polite"></div>
+
+          <div class="upload-footer">
+            <label class="publish-toggle">
+              <input id="publish-now" type="checkbox" checked />
+              <span></span>
+              すぐ公開する
+            </label>
+            <button id="upload-button" class="primary-button" type="button" disabled>
+              <span>写真を追加する</span>
+              <strong id="queue-count">0枚</strong>
+            </button>
+          </div>
+        </section>
+
+        <section class="library-section">
+          <header class="library-heading">
+            <div>
+              <p>Published collection</p>
+              <h2>追加した写真</h2>
+            </div>
+            <button id="refresh-items" class="quiet-button" type="button">更新</button>
+          </header>
+
+          <div class="library-filters" role="group" aria-label="展示室で絞り込む">
+            <button class="is-active" type="button" data-filter="works">作家作品</button>
+            <button type="button" data-filter="classroom">教室の様子</button>
+            <button type="button" data-filter="students">生徒作品</button>
+          </div>
+
+          <div id="media-library" class="media-library">
+            <p class="empty-state">写真を読み込んでいます。</p>
+          </div>
+        </section>
+      </section>
+
+      <section id="analytics-panel" class="admin-panel" data-panel="analytics" hidden>
+        <header class="panel-heading analytics-heading">
+          <div>
+            <p>Conversion dashboard</p>
+            <h2>サイトの反応を見る</h2>
+          </div>
+          <label class="range-picker">
+            集計期間
+            <select id="analytics-range">
+              <option value="7">直近7日</option>
+              <option value="30" selected>直近30日</option>
+              <option value="90">直近90日</option>
+            </select>
+          </label>
+        </header>
+
+        <aside class="metric-definition">
+          <span>今回のCV</span>
+          <p><strong>LINE遷移率</strong> = サイトを見た計測セッションのうち、公式LINEを押した割合</p>
+          <small>LINE内で実際に申込が完了した割合ではありません。</small>
+        </aside>
+
+        <section class="metric-grid" aria-label="主要指標">
+          <article>
+            <p>計測セッション</p>
+            <strong id="metric-sessions">—</strong>
+            <small>匿名・30分単位</small>
+          </article>
+          <article>
+            <p>ページ表示</p>
+            <strong id="metric-pageviews">—</strong>
+            <small>同じ人の複数ページを含む</small>
+          </article>
+          <article>
+            <p>LINEを押した回数</p>
+            <strong id="metric-line-clicks">—</strong>
+            <small id="metric-line-sessions">—セッション</small>
+          </article>
+          <article class="metric-primary">
+            <p>LINE遷移率</p>
+            <strong id="metric-cv">—</strong>
+            <small>まず改善する中心指標</small>
+          </article>
+        </section>
+
+        <section class="analytics-card chart-card">
+          <header>
+            <div>
+              <p>Daily movement</p>
+              <h3>日ごとの反応</h3>
+            </div>
+            <div class="chart-legend"><span>閲覧</span><span>LINE</span></div>
+          </header>
+          <div id="daily-chart" class="daily-chart" aria-label="日ごとの閲覧とLINE遷移"></div>
+        </section>
+
+        <div class="analytics-columns">
+          <section class="analytics-card">
+            <header>
+              <div>
+                <p>CTA performance</p>
+                <h3>どこが押されたか</h3>
+              </div>
+            </header>
+            <div id="target-list" class="ranking-list"></div>
+          </section>
+
+          <section class="analytics-card">
+            <header>
+              <div>
+                <p>Top pages</p>
+                <h3>見られたページ</h3>
+              </div>
+            </header>
+            <div id="page-list" class="ranking-list"></div>
+          </section>
+        </div>
+
+        <aside class="experiment-note">
+          <p>Experiment note</p>
+          <h3>変えるのは、一度にひとつ。</h3>
+          <span>CTA文言・位置・写真を同時に変えると、何が効いたか分からなくなります。変更日を決め、最低7日単位で比較します。</span>
+        </aside>
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

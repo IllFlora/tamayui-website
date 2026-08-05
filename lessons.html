@@ -25,7 +25,10 @@
       );
     </script>
     <link rel="stylesheet" href="lessons.css?v=6" />
+    <link rel="stylesheet" href="managed-gallery.css?v=1" />
     <script src="archive.js?v=3" defer></script>
+    <script src="gallery-runtime.js?v=1" defer></script>
+    <script src="analytics.js?v=1" defer></script>
   </head>
   <body>
     <header class="lesson-header">
@@ -64,7 +67,7 @@
             初めての方も、糸の持ち方から。<br />
             開催日・料金・持ち物などは公式LINEでご案内します。
           </p>
-          <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer">
+          <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer" data-track="line_click" data-track-id="lessons_classroom_line">
             教室参加を公式LINEで相談する <span>↗</span>
           </a>
         </div>
@@ -101,6 +104,14 @@
             />
           </figure>
         </div>
+
+        <section class="managed-gallery lesson-managed-gallery" data-managed-gallery="classroom" hidden aria-label="新しく追加された教室の様子">
+          <div class="managed-gallery-heading">
+            <p>More moments / lessons</p>
+            <h3>教室の日々</h3>
+          </div>
+          <div class="managed-gallery-wall" data-gallery-wall></div>
+        </section>
       </section>
 
       <section id="student-works" class="gallery-room student-room" aria-labelledby="student-heading">
@@ -147,7 +158,7 @@
             ひとつ結べたら、<br />
             身につける一作へ。
           </p>
-          <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer">
+          <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer" data-track="line_click" data-track-id="student_invitation_line">
             公式LINEで教室について聞いてみる <span>↗</span>
           </a>
         </div>
@@ -208,6 +219,14 @@
             <img src="images/lesson-gallery/student-20.jpg" width="1024" height="1280" alt="タティングレースの花や葉を飾った三つのピンクッション" loading="lazy" decoding="async" />
           </figure>
         </div>
+
+        <section class="managed-gallery lesson-managed-gallery" data-managed-gallery="students" hidden aria-label="新しく追加された生徒作品">
+          <div class="managed-gallery-heading">
+            <p>More studies / students</p>
+            <h3>新しい結び目</h3>
+          </div>
+          <div class="managed-gallery-wall" data-gallery-wall></div>
+        </section>
       </section>
 
       <section class="lesson-closing reveal-copy">
@@ -221,7 +240,7 @@
             公式LINEで「教室希望」と、希望地域がお決まりであればお送りください。
           </p>
         </div>
-        <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer">
+        <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer" data-track="line_click" data-track-id="lessons_closing_line">
           公式LINEで教室について相談する <span>↗</span>
         </a>
       </section>

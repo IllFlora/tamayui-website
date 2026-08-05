@@ -25,7 +25,10 @@
       );
     </script>
     <link rel="stylesheet" href="works.css?v=6" />
+    <link rel="stylesheet" href="managed-gallery.css?v=1" />
     <script src="archive.js?v=3" defer></script>
+    <script src="gallery-runtime.js?v=1" defer></script>
+    <script src="analytics.js?v=1" defer></script>
   </head>
   <body>
     <header class="gallery-header">
@@ -70,6 +73,14 @@
         </article>
       </section>
 
+      <section class="managed-gallery works-managed-gallery" data-managed-gallery="works" hidden aria-label="新しく追加された作品">
+        <div class="managed-gallery-heading">
+          <p>New arrivals / curated automatically</p>
+          <h2>新しい作品</h2>
+        </div>
+        <div class="managed-gallery-wall" data-gallery-wall></div>
+      </section>
+
       <section id="continue" class="gallery-closing reveal-copy">
         <p class="gallery-kicker">The collection continues</p>
         <h2>新しい結び目が生まれるたび、<br /><em>この部屋へ。</em></h2>
@@ -89,10 +100,10 @@
           </div>
         </nav>
         <div class="gallery-actions">
-          <a href="https://www.instagram.com/tamayui_tatting/" target="_blank" rel="noreferrer">
+          <a href="https://www.instagram.com/tamayui_tatting/" target="_blank" rel="noreferrer" data-track="instagram_click" data-track-id="works_instagram">
             Instagramで作品を見る <span>↗</span>
           </a>
-          <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer">
+          <a href="https://lin.ee/Zx36MtW" target="_blank" rel="noreferrer" data-track="line_click" data-track-id="works_line">
             教室・オーダーは公式LINEへ <span>↗</span>
           </a>
           <a href="index.html#works">たま結のホームへ戻る <span>→</span></a>

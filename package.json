@@ -1,0 +1,19 @@
+{
+  "name": "tamayui-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler pages dev . --d1 DB --r2 MEDIA -b ENVIRONMENT=development --compatibility-date=2026-08-05 --live-reload --port 4173",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4.118.0"
+  },
+  "overrides": {
+    "undici": "^7.29.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true,
+    "workerd@1.20260730.1": true
+  }
+}
