@@ -1132,7 +1132,7 @@ footer > p {
   letter-spacing: 0.15em;
 }
 
-.reveal {
+.motion-ready .reveal {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 480ms ease, transform 560ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -1141,6 +1141,12 @@ footer > p {
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+.motion-fallback .reveal {
+  opacity: 1;
+  transform: none;
+  transition: none;
 }
 
 @media (max-width: 900px) {
@@ -1584,7 +1590,7 @@ footer > p {
     scroll-behavior: auto;
   }
 
-  .reveal {
+  .motion-ready .reveal {
     opacity: 1;
     transform: none;
     transition: none;

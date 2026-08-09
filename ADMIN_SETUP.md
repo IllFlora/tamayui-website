@@ -53,12 +53,12 @@ Cloudflare Zero Trustの `Access controls > Applications` でSelf-hosted applica
 
 PagesプロジェクトのProductionとPreviewに以下を追加します。
 
-| Variable | Value |
-| --- | --- |
-| `ENVIRONMENT` | `production` |
-| `CF_ACCESS_TEAM_DOMAIN` | `<チーム名>.cloudflareaccess.com` |
-| `CF_ACCESS_AUD` | Access applicationのApplication Audience tag |
-| `ADMIN_EMAILS` | 許可メールをカンマ区切りで指定 |
+| Variable | Value | 間違えるとどうなるか |
+| --- | --- | --- |
+| `CF_ACCESS_TEAM_DOMAIN` | `<チーム名>.cloudflareaccess.com` | **未設定だと管理画面が503**になります |
+| `CF_ACCESS_AUD` | Access applicationのApplication Audience tag | **未設定だと管理画面が503**になります |
+| `ADMIN_EMAILS` | 許可メールをカンマ区切りで指定 | **未設定だと管理画面が503**になります |
+| `ENVIRONMENT` | `production` | ローカル開発用の目印です。`development` のまま置いても、認証スキップは `localhost` でしか働かないため本番の保護は外れません |
 
 例: `mother@example.com,owner@example.com`
 
@@ -73,6 +73,72 @@ Bindingsと環境変数は次回デプロイから有効になります。Pages�
 3. 下書き写真を1枚追加
 4. 公開へ切り替え、該当ギャラリーへ表示されることを確認
 5. 公開サイトから公式LINEを押し、管理画面の「アクセス」に反映されることを確認
+
+## 6. 運用上の必須設定と注意（ダッシュボード側）
+
+リポジトリのコードだけでは完結せず、Cloudflareダッシュボードでの設定が必要な項目です。
+
+### 6-1. `/api/events` のレート制限（未設定なら要対応）
+
+`/api/events` は認証なしで誰でもPOSTでき、1リクエストにつきD1へ1行INSERTします。`functions/_shared/http.js` の同一オリジン検査はOriginヘッダが無いリクエストを通すため、ブラウザ以外からは素通しできます。放置するとD1の行数と書き込み枠が第三者に消費され、管理画面の数値も汚染されます。
+
+`Security > WAF > Rate limiting rules` に次を作成します。**設定できる値はCloudflareのプランによって異なります。**
+
+共通の設定:
+
+| 項目 | 値 |
+| --- | --- |
+| 対象 | `http.request.uri.path eq "/api/events"` |
+| カウント単位 | IPアドレス |
+
+閾値と超過時の動作は、契約プランに合わせて選びます。
+
+| プラン | 集計期間 | 閾値 | ブロック時間 |
+| --- | --- | --- | --- |
+| **Free**（ルールは1本まで） | 10秒（Freeはこの値のみ） | 10 リクエスト | 10秒（Freeはこの値のみ） |
+| Pro 以上 | 1分 | 60 リクエスト | 1分 |
+
+Freeプランでは集計期間・ブロック時間ともに10秒固定で、ルールも1本しか作れません（Cloudflare公式のAvailability表による）。そのためFreeでは「10秒あたり10リクエスト」を目安にします。
+
+閾値の根拠: 通常の閲覧では1ページにつき `page_view` が1件、LINE等のリンククリックで1件が送られる程度で、1人の訪問者が10秒間に10件を超えることはまずありません。誤ってブロックする心配は低い値です。
+
+公式資料: https://developers.cloudflare.com/waf/rate-limiting-rules/
+
+### 6-2. 計測データの保持期間
+
+`analytics_events` は自動削除されません。半年ごとにD1 Consoleで古い行を削除します。
+
+```sql
+DELETE FROM analytics_events WHERE occurred_at < date('now', '-180 days');
+```
+
+### 6-3. R2の孤児オブジェクトの棚卸し
+
+写真を削除するとD1の行を先に消し、そのあとR2の実体を消します（`functions/api/admin/items/[id].js`）。この順序は「管理画面から消したのに公開側で画像が壊れて残る」事故を防ぐためですが、R2側の削除に失敗すると参照されないファイルが残ります。年1回、R2バケットのオブジェクト一覧とD1の `storage_key` を突き合わせ、D1に無いものを削除してください。
+
+### 6-4. リポジトリ直下に作ってはいけないディレクトリ名
+
+配信ルートがリポジトリ直下のため、静的ファイルはFunctionsより優先されます。**`media/` と `api/` という名前のディレクトリを作らないでください。** 作った時点で `/media/*` のcatch-allが無効化され、管理画面から追加した写真が全て表示されなくなります。
+
+### 6-5. www の統合
+
+`_redirects` ファイルではドメイン単位の転送ができないため、この設定はダッシュボードでしか行えません。現状 `https://www.tamayui.jp/` は転送されず、`tamayui.jp` と同じ内容が2つのアドレスで見える状態です。
+
+`Rules > Redirect Rules > Create rule` で次のように作成します。
+
+| 項目 | 値 |
+| --- | --- |
+| ルール名 | `www to apex` |
+| 一致条件 | **Wildcard pattern** を選び、`https://www.tamayui.jp/*` |
+| 転送先 URL | `https://tamayui.jp/${1}` |
+| ステータスコード | `301`（Permanent Redirect） |
+| Preserve query string | **On** |
+
+`${1}` は `*` に一致した部分（パス）を引き継ぐ指定です。これにより `www.tamayui.jp/lessons` は `tamayui.jp/lessons` へ、検索順位を引き継いだまま転送されます。
+
+公式資料: https://developers.cloudflare.com/rules/url-forwarding/examples/redirect-www-to-root/
+
+※ この設定と 6-1 のレート制限は、いずれもCloudflareダッシュボードでの作業です。未設定のままでもサイトは動きますが、設定するまでは「未対応の運用項目」として残ります。
 
 ## 指標の定義
 

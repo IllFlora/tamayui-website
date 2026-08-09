@@ -63,8 +63,13 @@ export async function onRequestDelete(context) {
     const current = await db.prepare("SELECT storage_key FROM media_items WHERE id = ?").bind(id).first();
     if (!current) throw new HttpError(404, "写真が見つかりません。", "item_not_found");
 
-    await bucket.delete(current.storage_key);
+    // D1 を先に消す。R2 を先に消すと、R2削除成功→D1削除失敗のときに
+    // 「行はあるが実体が無い」写真が公開ギャラリーに残り、画像が壊れて表示される。
+    // 逆順なら最悪でも参照されないR2オブジェクトが残るだけで、表示は壊れない。
     await db.prepare("DELETE FROM media_items WHERE id = ?").bind(id).run();
+    await bucket.delete(current.storage_key).catch((error) => {
+      console.error("R2 object left orphaned after row delete", current.storage_key, error);
+    });
     return noContent();
   } catch (error) {
     return errorResponse(error);

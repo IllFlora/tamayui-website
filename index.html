@@ -9,6 +9,20 @@
     />
     <title>たま結 Tamayui | 長野県のタティングレース作家・教室</title>
     <link rel="canonical" href="https://tamayui.jp/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="たま結 Tamayui" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:url" content="https://tamayui.jp/" />
+    <meta property="og:title" content="たま結 Tamayui | 長野県のタティングレース作家・教室" />
+    <meta
+      property="og:description"
+      content="長野県でタティングレース作品の制作と教室を行っています。伊那市・駒ヶ根市での教室、岡谷市・松本市・塩尻市への出張レッスンに対応。"
+    />
+    <meta property="og:image" content="https://tamayui.jp/photos/167632.jpg" />
+    <meta property="og:image:width" content="1105" />
+    <meta property="og:image:height" content="1482" />
+    <meta property="og:image:alt" content="色とりどりのタティングレースをあしらった木製コースター" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/png" href="logo.png" />
     <link rel="apple-touch-icon" href="logo.png" />
     <script type="application/ld+json">
@@ -63,8 +77,15 @@
       href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+JP:wght@300;400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=16" />
-    <script src="script.js?v=10" defer></script>
+    <script>
+      document.documentElement.classList.add("motion-ready");
+      window.__motionFallbackTimer = window.setTimeout(
+        () => document.documentElement.classList.add("motion-fallback"),
+        800,
+      );
+    </script>
+    <link rel="stylesheet" href="styles.css?v=17" />
+    <script src="script.js?v=11" defer></script>
     <script src="analytics.js?v=1" defer></script>
   </head>
   <body>
@@ -166,7 +187,7 @@
         </div>
 
         <div class="works-action reveal">
-          <a class="outline-button" href="works.html">
+          <a class="outline-button" href="/works">
             作品をもっと見る <span>→</span>
           </a>
           <small>More works · a quiet collection</small>
@@ -273,10 +294,10 @@
           <div class="lesson-actions">
             <p class="lesson-action-label">教室ギャラリー</p>
             <nav class="lesson-gallery-actions" aria-label="教室ギャラリーを見る">
-              <a class="text-link" href="lessons.html#classroom">
+              <a class="text-link" href="/lessons#classroom">
                 教室の様子 <span>→</span>
               </a>
-              <a class="text-link" href="lessons.html#student-works">
+              <a class="text-link" href="/lessons#student-works">
                 生徒作品 <span>→</span>
               </a>
             </nav>

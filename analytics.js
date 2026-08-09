@@ -78,7 +78,9 @@
     if (url.hostname === "lin.ee") return "line_click";
     if (url.hostname.includes("instagram.com")) return "instagram_click";
     if (url.hostname === "note.com") return "note_click";
-    if (url.pathname.endsWith("lessons.html") || url.pathname.endsWith("works.html")) return "gallery_click";
+    // Cloudflare Pages は /lessons.html を /lessons へ 308 する。内部リンクは
+    // 拡張子なしへ統一したが、外部やブックマークからは .html でも到達しうるので両方拾う。
+    if (/\/(?:lessons|works)(?:\.html)?\/?$/.test(url.pathname)) return "gallery_click";
     return "";
   }
 

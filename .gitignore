@@ -3,3 +3,12 @@ node_modules/
 .dev.vars
 .env
 *.log
+
+# 未加工の写真素材と社内資料。リポジトリ直下がそのまま公開配信ルートになるため、
+# コミットするとURLを知っている人が誰でもダウンロードできてしまう。
+# 公開したい写真は images/ 配下にリサイズ済みのものだけを置くこと。
+/Lesson photos/
+/photos/【タティングレース教室の様子】/
+/photos/【生徒さんの練習成果】/
+/images/works/
+/reports/

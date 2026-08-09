@@ -1,0 +1,43 @@
+# Cloudflare Pages は /works.html を /works へ 308 する（clean URL）。
+# _headers は「リクエストされたURL」に対して照合されるため、/*.html だけに
+# CSP を書くと、実際に 200 を返す /works ・ /lessons に CSP が付かない。
+# 実測(wrangler pages dev): /works -> 200 かつ CSP 無し、/works.html -> 308。
+# したがって CSP は /* に置く。CSS/JS/画像応答に付いても無害。
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+
+# 'unsafe-inline' が script-src に必要なのは、index/works/lessons の <head> にある
+# motion-ready 付与のインラインスクリプトのため。これを外部ファイル化するか
+# nonce/hash 方式にすれば 'unsafe-inline' は削除できる（将来の改善候補）。
+
+# 管理画面は検索避けと no-store を明示する。
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+
+# ハッシュではなく ?v= クエリでバージョン管理しているため、
+# 長期キャッシュにはせず再検証させる。
+/*.css
+  Cache-Control: public, max-age=600, must-revalidate
+
+/*.js
+  Cache-Control: public, max-age=600, must-revalidate
+
+# 画像はファイル名が変わらない限り中身も変わらない運用。
+/images/*
+  Cache-Control: public, max-age=604800
+
+/photos/*
+  Cache-Control: public, max-age=604800
+
+/lesson-photos/*
+  Cache-Control: public, max-age=604800
+
+# 注意: _headers は Pages Functions が生成する応答（/api/*, /media/*）には
+# 適用されない。/media/* は functions/media/[[path]].js:29-30 で
+# cache-control と nosniff を自前で付与している。
