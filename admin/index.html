@@ -28,16 +28,32 @@
         <p>管理データへ接続しています</p>
       </section>
 
-      <nav class="admin-tabs" aria-label="管理機能">
-        <button class="is-active" type="button" data-tab="photos" aria-controls="photos-panel" aria-selected="true">
+      <div class="admin-tabs" role="tablist" aria-label="管理機能">
+        <button
+          id="photos-tab"
+          class="is-active"
+          type="button"
+          role="tab"
+          data-tab="photos"
+          aria-controls="photos-panel"
+          aria-selected="true"
+        >
           <span>01</span> 写真
         </button>
-        <button type="button" data-tab="analytics" aria-controls="analytics-panel" aria-selected="false">
+        <button
+          id="analytics-tab"
+          type="button"
+          role="tab"
+          data-tab="analytics"
+          aria-controls="analytics-panel"
+          aria-selected="false"
+          tabindex="-1"
+        >
           <span>02</span> アクセス
         </button>
-      </nav>
+      </div>
 
-      <section id="photos-panel" class="admin-panel" data-panel="photos">
+      <section id="photos-panel" class="admin-panel" data-panel="photos" role="tabpanel" aria-labelledby="photos-tab" tabindex="0">
         <header class="panel-heading">
           <div>
             <p>Gallery management</p>
@@ -106,7 +122,15 @@
         </section>
       </section>
 
-      <section id="analytics-panel" class="admin-panel" data-panel="analytics" hidden>
+      <section
+        id="analytics-panel"
+        class="admin-panel"
+        data-panel="analytics"
+        role="tabpanel"
+        aria-labelledby="analytics-tab"
+        tabindex="0"
+        hidden
+      >
         <header class="panel-heading analytics-heading">
           <div>
             <p>Conversion dashboard</p>
@@ -121,6 +145,8 @@
             </select>
           </label>
         </header>
+
+        <p id="range-summary" class="range-summary" aria-live="polite"></p>
 
         <aside class="metric-definition">
           <span>今回のCV</span>
@@ -159,7 +185,9 @@
             </div>
             <div class="chart-legend"><span>閲覧</span><span>LINE</span></div>
           </header>
-          <div id="daily-chart" class="daily-chart" aria-label="日ごとの閲覧とLINE遷移"></div>
+          <!-- role を持たない div への aria-label は支援技術に無視される。
+               グラフ本体の説明は admin.js が生成する <svg role="img"> 側に持たせている。 -->
+          <div id="daily-chart" class="daily-chart" aria-live="polite"></div>
         </section>
 
         <div class="analytics-columns">

@@ -63,11 +63,19 @@ export async function readJson(request, maxBytes = 16_384) {
     throw new HttpError(413, "送信データが大きすぎます。", "payload_too_large");
   }
 
+  let parsed;
   try {
-    return await request.json();
+    parsed = await request.json();
   } catch {
     throw new HttpError(400, "JSON形式が正しくありません。", "invalid_json");
   }
+
+  // JSON.parse("null") は null を返すため、呼び出し側の body.foo が TypeError になり
+  // 400 ではなく 500 になっていた。オブジェクトであることをここで保証する。
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new HttpError(400, "送信内容の形式が正しくありません。", "invalid_body");
+  }
+  return parsed;
 }
 
 export function text(value, maxLength = 200) {

@@ -32,6 +32,8 @@
     filters: document.querySelector(".library-filters"),
     refreshItems: document.querySelector("#refresh-items"),
     analyticsRange: document.querySelector("#analytics-range"),
+    rangeSummary: document.querySelector("#range-summary"),
+    analyticsPanel: document.querySelector("#analytics-panel"),
     dailyChart: document.querySelector("#daily-chart"),
     targetList: document.querySelector("#target-list"),
     pageList: document.querySelector("#page-list"),
@@ -125,15 +127,21 @@
     context.drawImage(source, 0, 0, width, height);
     if (typeof source.close === "function") source.close();
 
-    const webp = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", 0.9));
-    if (!webp) throw new Error(`${file.name} を軽量化できませんでした。`);
+    // toBlob は未対応の type を渡されると null ではなく image/png で返す仕様。
+    // そのまま .webp / image/webp として送ると、実体PNGなのにDBのcontent_typeが
+    // image/webp になり、拡張子と中身が食い違う。返ってきた type で判定する。
+    const encoded = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", 0.9));
+    if (!encoded) throw new Error(`${file.name} を軽量化できませんでした。`);
+    const isWebp = encoded.type === "image/webp";
+    const outputType = isWebp ? "image/webp" : "image/png";
+    const outputExt = isWebp ? "webp" : "png";
     const baseName = file.name.replace(/\.[^.]+$/, "").slice(0, 120) || "tamayui-photo";
-    const optimized = new File([webp], `${baseName}.webp`, { type: "image/webp" });
+    const optimized = new File([encoded], `${baseName}.${outputExt}`, { type: outputType });
     return {
       id: crypto.randomUUID?.() || `${Date.now()}-${Math.random()}`,
       file: optimized,
       originalName: file.name,
-      preview: URL.createObjectURL(webp),
+      preview: URL.createObjectURL(encoded),
       collection,
       alt: defaultAlt(collection),
       width,
@@ -384,7 +392,150 @@
   }
 
   function renderMetric(id, value) {
-    document.querySelector(id).textContent = value;
+    const target = document.querySelector(id);
+    if (target) target.textContent = value;
+  }
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  function svg(tag, attrs = {}) {
+    const element = document.createElementNS(SVG_NS, tag);
+    for (const [key, value] of Object.entries(attrs)) element.setAttribute(key, String(value));
+    return element;
+  }
+
+  function formatDay(day) {
+    return day.slice(5).replace("-", "/");
+  }
+
+  /**
+   * 日ごとの棒グラフ。90日を選ぶと棒が90本並ぶため、DOM要素を日数分作るのではなく
+   * viewBox 固定の SVG に描いて幅に追従させる。ラベルは重ならない本数だけ間引く。
+   */
+  function renderDailyChart(series) {
+    dom.dailyChart.replaceChildren();
+
+    if (!series.length) {
+      dom.dailyChart.append(node("p", "empty-state", "計測データがまだありません。公開後のアクセスから蓄積されます。"));
+      return;
+    }
+
+    const total = series.reduce((sum, row) => sum + row.pageViews + row.lineSessions, 0);
+    if (total === 0) {
+      dom.dailyChart.append(
+        node("p", "empty-state", "この期間のアクセスはまだ記録されていません。期間を広げるか、公開後しばらくお待ちください。"),
+      );
+      return;
+    }
+
+    // viewBox を固定幅にすると、360px の端末では 360/960 = 0.375 倍に縮み、
+    // 11px 指定の軸ラベルが実測4px程度になって読めない。
+    // 実際のコンテナ幅を viewBox 幅にして 1:1 で描き、文字サイズを実寸どおりにする。
+    const W = Math.max(320, Math.round(dom.dailyChart.clientWidth || 960));
+    const H = W < 520 ? 220 : 260;
+    const padL = 34;
+    const padR = 8;
+    const padT = 14;
+    const padB = 26;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+
+    // LINE遷移だけが記録された日(page_view の送信が失敗した等)に棒が枠外へ出ないよう、
+    // 上限は両系列の最大から取る。
+    const peak = Math.max(1, ...series.map((row) => Math.max(row.pageViews, row.lineSessions)));
+    // 目盛りはキリのよい数に丸める（1,2,5,10,20,50…）
+    const step = [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000].find((n) => peak / n <= 4) || 10000;
+    const top = Math.ceil(peak / step) * step;
+
+    const chart = svg("svg", {
+      viewBox: `0 0 ${W} ${H}`,
+      class: "daily-chart-svg",
+      role: "img",
+      "aria-label": `日ごとの閲覧数とLINE遷移数。${formatDay(series[0].day)}から${formatDay(series[series.length - 1].day)}まで。`,
+    });
+
+    // 横罫線と目盛り
+    for (let v = 0; v <= top; v += step) {
+      const y = padT + plotH - (v / top) * plotH;
+      chart.append(svg("line", { x1: padL, y1: y, x2: W - padR, y2: y, class: "grid-line" }));
+      const label = svg("text", { x: padL - 8, y: y + 4, class: "axis-label", "text-anchor": "end" });
+      label.textContent = String(v);
+      chart.append(label);
+    }
+
+    const slot = plotW / series.length;
+    const barW = Math.max(1, Math.min(18, slot * 0.62));
+    // 日付ラベルは 1つ約38px 必要。入る本数だけに間引く。
+    const labelSlots = Math.max(2, Math.floor(plotW / 38));
+    const labelEvery = Math.ceil(series.length / labelSlots);
+
+    series.forEach((row, index) => {
+      const cx = padL + slot * (index + 0.5);
+      const viewsH = (row.pageViews / top) * plotH;
+      const lineH = (row.lineSessions / top) * plotH;
+
+      const group = svg("g", { class: "chart-day" });
+      const title = svg("title");
+      title.textContent = `${row.day}　閲覧 ${row.pageViews} / LINE ${row.lineSessions}`;
+      group.append(title);
+
+      // 値が0の日も「棒がない日」として見えるよう、ホバー領域は必ず置く
+      group.append(svg("rect", { x: cx - slot / 2, y: padT, width: slot, height: plotH, class: "chart-hit" }));
+
+      if (row.pageViews > 0) {
+        group.append(
+          svg("rect", {
+            x: cx - barW / 2,
+            y: padT + plotH - viewsH,
+            width: barW,
+            height: Math.max(1.5, viewsH),
+            rx: Math.min(2, barW / 2),
+            class: "bar-views",
+          }),
+        );
+      }
+      if (row.lineSessions > 0) {
+        group.append(
+          svg("rect", {
+            x: cx - barW / 2,
+            y: padT + plotH - lineH,
+            width: barW,
+            height: Math.max(1.5, lineH),
+            rx: Math.min(2, barW / 2),
+            class: "bar-line",
+          }),
+        );
+      }
+
+      if (index % labelEvery === 0 || index === series.length - 1) {
+        const text = svg("text", { x: cx, y: H - 10, class: "axis-label", "text-anchor": "middle" });
+        text.textContent = formatDay(row.day);
+        group.append(text);
+      }
+
+      chart.append(group);
+    });
+
+    // 軸線
+    chart.append(svg("line", { x1: padL, y1: padT + plotH, x2: W - padR, y2: padT + plotH, class: "axis-line" }));
+
+    dom.dailyChart.append(chart);
+  }
+
+  // viewBox をコンテナ幅に合わせている以上、幅が変わったら描き直す必要がある。
+  let lastSeries = [];
+  let resizeTimer;
+  function watchChartResize() {
+    window.addEventListener(
+      "resize",
+      () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (lastSeries.length) renderDailyChart(lastSeries);
+        }, 150);
+      },
+      { passive: true },
+    );
   }
 
   function renderAnalytics(data) {
@@ -395,26 +546,17 @@
     renderMetric("#metric-line-sessions", `${Number(summary.lineSessions || 0).toLocaleString("ja-JP")}セッション`);
     renderMetric("#metric-cv", `${Number(summary.lineTransitionRate || 0).toFixed(1)}%`);
 
-    dom.dailyChart.replaceChildren();
-    const daily = data.daily || [];
-    const maxValue = Math.max(1, ...daily.flatMap((row) => [Number(row.page_views || 0), Number(row.line_sessions || 0)]));
-    if (!daily.length) {
-      dom.dailyChart.append(node("p", "empty-state", "計測データがまだありません。公開後のアクセスから蓄積されます。"));
-    } else {
-      daily.forEach((row) => {
-        const group = node("div", "chart-day");
-        group.title = `${row.day}: 閲覧 ${row.page_views || 0} / LINE ${row.line_sessions || 0}`;
-        const views = document.createElement("i");
-        views.style.height = `${Math.max(2, (Number(row.page_views || 0) / maxValue) * 170)}px`;
-        const line = document.createElement("i");
-        line.style.height = `${Math.max(2, (Number(row.line_sessions || 0) / maxValue) * 170)}px`;
-        const date = document.createElement("time");
-        date.dateTime = row.day;
-        date.textContent = row.day.slice(5).replace("-", "/");
-        group.append(views, line, date);
-        dom.dailyChart.append(group);
-      });
+    // 選んだ期間が画面に出ていないと、数字が同じときに切り替わったのか判断できない。
+    const range = data.range || {};
+    if (dom.rangeSummary) {
+      dom.rangeSummary.textContent =
+        range.from && range.to
+          ? `${range.from.replace(/-/g, "/")} 〜 ${range.to.replace(/-/g, "/")}（日本時間 ${range.days}日間）`
+          : "";
     }
+
+    lastSeries = data.daily || [];
+    renderDailyChart(lastSeries);
 
     dom.targetList.replaceChildren();
     const targets = data.targets || [];
@@ -442,16 +584,29 @@
     }
   }
 
+  let analyticsRequestId = 0;
+
   async function loadAnalytics() {
-    const body = await api(`/api/admin/analytics?days=${state.analyticsDays}`);
-    renderAnalytics(body);
+    // 期間を続けて切り替えたとき、遅れて届いた古い応答が新しい表示を上書きしないようにする。
+    const requestId = ++analyticsRequestId;
+    dom.analyticsPanel?.classList.add("is-loading");
+    try {
+      const body = await api(`/api/admin/analytics?days=${state.analyticsDays}`);
+      if (requestId !== analyticsRequestId) return;
+      renderAnalytics(body);
+    } finally {
+      if (requestId === analyticsRequestId) dom.analyticsPanel?.classList.remove("is-loading");
+    }
   }
 
-  function switchTab(tab) {
+  function switchTab(tab, { focus = false } = {}) {
     document.querySelectorAll("[data-tab]").forEach((button) => {
       const active = button.dataset.tab === tab;
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-selected", String(active));
+      // tablist は「選択中のタブだけがTab移動の対象」。残りは矢印キーで辿る。
+      button.tabIndex = active ? 0 : -1;
+      if (active && focus) button.focus();
     });
     dom.panels.forEach((panel) => {
       panel.hidden = panel.dataset.panel !== tab;
@@ -465,6 +620,23 @@
     dom.tabs.addEventListener("click", (event) => {
       const button = event.target.closest("[data-tab]");
       if (button) switchTab(button.dataset.tab);
+    });
+
+    // role="tab" を名乗る以上、左右矢印・Home・End での移動を用意する必要がある。
+    dom.tabs.addEventListener("keydown", (event) => {
+      const buttons = [...dom.tabs.querySelectorAll("[data-tab]")];
+      const current = buttons.findIndex((button) => button.getAttribute("aria-selected") === "true");
+      if (current < 0) return;
+
+      let next = null;
+      if (event.key === "ArrowRight") next = (current + 1) % buttons.length;
+      else if (event.key === "ArrowLeft") next = (current - 1 + buttons.length) % buttons.length;
+      else if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = buttons.length - 1;
+      if (next === null) return;
+
+      event.preventDefault();
+      switchTab(buttons[next].dataset.tab, { focus: true });
     });
 
     dom.photoInput.addEventListener("change", () => addFiles(dom.photoInput.files));
@@ -518,7 +690,19 @@
     try {
       const session = await api("/api/admin/session");
       setConnection(`${session.admin.email} で接続中`, "ready");
-      await Promise.all([loadItems(), loadAnalytics()]);
+      watchChartResize();
+      // 片方の失敗でもう片方を巻き添えにしない。以前は Promise.all だったため、
+      // 集計APIが落ちると読み込み済みの写真一覧がエラー文で上書きされていた。
+      await Promise.all([
+        loadItems().catch((error) => {
+          dom.library.replaceChildren(node("p", "empty-state", `写真を読み込めませんでした：${error.message}`));
+          toast(error.message, "error");
+        }),
+        loadAnalytics().catch((error) => {
+          dom.dailyChart.replaceChildren(node("p", "empty-state", `アクセス集計を読み込めませんでした：${error.message}`));
+          toast(error.message, "error");
+        }),
+      ]);
     } catch (error) {
       setConnection(error.message, "error");
       dom.library.replaceChildren(node("p", "empty-state", error.message));

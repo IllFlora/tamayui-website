@@ -763,42 +763,63 @@ a {
   background: var(--clay);
 }
 
-.daily-chart {
-  display: flex;
-  min-height: 230px;
-  align-items: end;
-  gap: 5px;
-  padding: 16px 0 0;
-  overflow-x: auto;
-  border-bottom: 1px solid var(--line);
-}
-
-.chart-day {
-  display: grid;
-  min-width: 20px;
-  flex: 1 0 20px;
-  grid-template-columns: repeat(2, minmax(3px, 1fr));
-  align-items: end;
-  gap: 2px;
-  height: 190px;
-}
-
-.chart-day i {
-  display: block;
-  min-height: 2px;
-  background: var(--sage);
-}
-
-.chart-day i + i {
-  background: var(--clay);
-}
-
-.chart-day time {
-  grid-column: 1 / -1;
-  margin-top: 7px;
+.range-summary {
+  margin: 0 0 18px;
   color: var(--sage);
-  font-size: 8px;
-  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.daily-chart {
+  padding: 14px 0 0;
+}
+
+/* 90日を選ぶと棒が90本になる。DOMを日数分作らず viewBox 固定のSVGで描き、
+   幅は親に追従させる。棒の太さとラベル間引きは admin.js 側で計算している。 */
+.daily-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.daily-chart-svg .grid-line {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.daily-chart-svg .axis-line {
+  stroke: var(--line);
+  stroke-width: 1.5;
+}
+
+.daily-chart-svg .axis-label {
+  fill: var(--sage);
+  font-size: 11px;
+}
+
+.daily-chart-svg .bar-views {
+  fill: var(--sage);
+}
+
+.daily-chart-svg .bar-line {
+  fill: var(--clay);
+}
+
+/* 0件の日にもホバー領域を置き、ツールチップで「その日は0だった」と分かるようにする */
+.daily-chart-svg .chart-hit {
+  fill: transparent;
+}
+
+.daily-chart-svg .chart-day:hover .chart-hit {
+  fill: rgba(0, 0, 0, 0.035);
+}
+
+/* 期間を切り替えたとき、数字が同じでも再取得したことが分かるようにする */
+.admin-panel.is-loading .daily-chart,
+.admin-panel.is-loading .metric-grid,
+.admin-panel.is-loading .analytics-columns {
+  opacity: 0.45;
+  transition: opacity 120ms ease;
 }
 
 .analytics-columns {
@@ -1047,8 +1068,8 @@ a {
     padding: 20px 16px;
   }
 
-  .daily-chart {
-    min-height: 205px;
+  .daily-chart-svg .axis-label {
+    font-size: 14px;
   }
 
   .experiment-note {
@@ -1063,5 +1084,17 @@ a {
   *::after {
     scroll-behavior: auto !important;
     transition: none !important;
+  }
+}
+
+/* iOS Safari は font-size が16px未満の入力欄にフォーカスすると自動でページを拡大する。
+   スマホからの運用が前提なので、説明文や公開状態を編集するたびに画面が飛ぶのを防ぐ。 */
+@media (max-width: 640px) {
+  .media-card select,
+  .media-card input,
+  .queue-item input,
+  .queue-item select,
+  .range-picker select {
+    font-size: 16px;
   }
 }

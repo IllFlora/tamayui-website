@@ -44,6 +44,7 @@ export async function onRequestGet(context) {
 
 export async function onRequestPost(context) {
   let uploadedKey;
+  let rowCommitted = false;
   try {
     assertSameOrigin(context.request);
     await requireAdmin(context);
@@ -108,11 +109,32 @@ export async function onRequestPost(context) {
         now.toISOString(),
       )
       .run();
+    rowCommitted = true;
 
-    const row = await db.prepare("SELECT * FROM media_items WHERE id = ?").bind(id).first();
-    return json({ ok: true, item: adminMediaItem(row) }, 201);
+    return json(
+      {
+        ok: true,
+        item: adminMediaItem({
+          id,
+          collection,
+          storage_key: uploadedKey,
+          filename,
+          content_type: file.type,
+          width,
+          height,
+          alt_text: altText,
+          status,
+          sort_order: sortOrder,
+          created_at: now.toISOString(),
+          updated_at: now.toISOString(),
+        }),
+      },
+      201,
+    );
   } catch (error) {
-    if (uploadedKey && context.env.MEDIA) {
+    // 行が確定した後に投げられた例外でR2を消すと、DBには行があるのに実体が無い
+    // 「壊れた画像」が公開ギャラリーに残る。補償削除は行が入る前の失敗に限る。
+    if (uploadedKey && !rowCommitted && context.env.MEDIA) {
       await context.env.MEDIA.delete(uploadedKey).catch(() => {});
     }
     return errorResponse(error);
