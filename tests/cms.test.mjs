@@ -141,6 +141,83 @@ test("public pages expose Open Graph metadata for sharing", async () => {
   }
 });
 
+test("every picture element has working webp sources and a jpeg fallback", async () => {
+  // srcset のパスを間違えても、ブラウザは <img> のJPEGへ静かに落ちるだけで
+  // 見た目には現れない。壊れたWebP参照はここでしか検出できない。
+  let pictures = 0;
+  let candidates = 0;
+
+  for (const page of ["index.html", "works.html", "lessons.html"]) {
+    const html = await readFile(new URL(page, root), "utf8");
+
+    for (const [, block] of html.matchAll(/<picture>([\s\S]*?)<\/picture>/g)) {
+      pictures += 1;
+
+      const source = block.match(/<source\b[^>]*>/);
+      assert.ok(source, `${page}: <picture> に <source> がない`);
+      assert.match(source[0], /type="image\/webp"/, `${page}: <source> の type が image/webp でない`);
+      assert.match(source[0], /sizes="/, `${page}: <source> に sizes がない`);
+
+      const srcset = source[0].match(/srcset="([^"]+)"/)?.[1];
+      assert.ok(srcset, `${page}: <source> に srcset がない`);
+      assert.ok(
+        /-\d+\.webp \d+w/.test(srcset),
+        `${page}: srcset に縮小版が1つも無く、モバイルでも等倍が配信される`,
+      );
+
+      const fallbackWidth = Number(block.match(/<img\b[^>]*width="(\d+)"/)?.[1]);
+
+      for (const entry of srcset.split(",")) {
+        const [path, descriptor] = entry.trim().split(/\s+/);
+        assert.match(descriptor ?? "", /^\d+w$/, `${page}: ${path} の幅記述子が不正`);
+        await access(new URL(path, root));
+
+        // 記述子がファイル名と食い違うと、ブラウザは実在しない解像度を前提に
+        // 候補を選ぶため、狙いより粗い/重い画像が配信される。ファイル存在チェック
+        // だけでは通ってしまうので、命名規約との対応をここで縛る。
+        const declared = Number(descriptor.slice(0, -1));
+        const suffix = path.match(/-(\d+|full)\.webp$/)?.[1];
+        assert.ok(suffix, `${page}: ${path} が -<幅>.webp / -full.webp の命名でない`);
+        if (suffix === "full") {
+          assert.equal(declared, fallbackWidth, `${page}: ${path} の記述子が元画像の幅と一致しない`);
+        } else {
+          assert.equal(declared, Number(suffix), `${page}: ${path} の記述子がファイル名の幅と一致しない`);
+        }
+        candidates += 1;
+      }
+
+      // WebP 非対応環境のフォールバック。width/height はCLS防止に必須。
+      const img = block.match(/<img\b[^>]*>/);
+      assert.ok(img, `${page}: <picture> に <img> フォールバックがない`);
+      assert.match(img[0], /src="[^"]+\.jpe?g"/, `${page}: フォールバックがJPEGでない`);
+      assert.match(img[0], /width="\d+"/, `${page}: フォールバックに width がない`);
+      assert.match(img[0], /height="\d+"/, `${page}: フォールバックに height がない`);
+      assert.match(img[0], /alt="/, `${page}: フォールバックに alt がない`);
+    }
+  }
+
+  // 固定値で数を縛ると画像を足すたびにテスト修正が要る。数ではなく
+  // 「JPEGを指す <img> は例外なく <picture> に入っていること」を動的に検査する。
+  for (const page of ["index.html", "works.html", "lessons.html"]) {
+    const html = await readFile(new URL(page, root), "utf8");
+    const wrapped = new Set();
+    for (const [, block] of html.matchAll(/<picture>([\s\S]*?)<\/picture>/g)) {
+      const src = block.match(/<img\b[^>]*src="([^"]+)"/)?.[1];
+      if (src) wrapped.add(src);
+    }
+    for (const [tag] of html.matchAll(/<img\b[\s\S]*?>/g)) {
+      const src = tag.match(/src="([^"]+)"/)?.[1];
+      if (!src || !/\.jpe?g$/i.test(src)) continue;
+      assert.ok(wrapped.has(src), `${page}: ${src} が <picture> で包まれておらず WebP が配信されない`);
+    }
+  }
+
+  assert.ok(pictures > 0, "<picture> が1つも見つからない");
+  // 候補数は元画像の幅で決まる (480/800/1200 のうち元幅未満のものだけ + 等倍) ため
+  // 固定値では縛れない。「必ず縮小版が1つ以上あること」を各 <picture> で検査済み。
+  assert.ok(candidates >= pictures * 2, `srcset 候補が少なすぎる (${candidates} / ${pictures} pictures)`);
+});
+
 test("important LINE links have stable analytics labels", async () => {
   const index = await readFile(new URL("index.html", root), "utf8");
   assert.match(index, /data-track-id="nav_line"/);

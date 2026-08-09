@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # tests/cms.test.mjs は、HTMLが参照する画像・スクリプトの実在確認と、
+      # 本番で認証がバイパスされないことの回帰検査を含む。
+      # 画像パスのtypoや認証条件の緩和を、デプロイ前にここで止める。
+      - name: Run tests
+        run: npm test
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high

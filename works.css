@@ -440,3 +440,10 @@ img {
     transition: none;
   }
 }
+
+/* <img> を <picture> で包んでも、親の grid/flex から見たとき
+   これまでどおり <img> が直接の子として扱われるようにする。
+   これが無いと <picture>(inline) が子になり、レイアウトが変わる。 */
+picture {
+  display: contents;
+}
