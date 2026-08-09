@@ -1701,3 +1701,74 @@ picture {
     margin-bottom: 24px;
   }
 }
+
+/* ===== ヒーローのバランス調整 =====
+   「タティングレース教室」が単語の途中(タティングレ/ース教室)で折れていたのと、
+   日本語ナビが右端で見切れていたのを直す。 */
+
+/* 左カラムが43%では日本語の見出しが収まらない。写真を少し譲る。 */
+.hero {
+  grid-template-columns: 52% 48%;
+}
+
+.hero-copy {
+  padding: 140px 5vw 70px 7vw;
+}
+
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 26px;
+  gap: 6px;
+}
+
+.hero-title-brand {
+  font-size: clamp(30px, 3.4vw, 52px);
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+}
+
+/* 教室名は1行で読ませる。英字セリフだと日本語がフォールバックして字間が
+   暴れるので、ここは明朝に固定し、折り返しも禁止する。 */
+.hero-title-main {
+  color: var(--olive);
+  font-family: var(--serif-jp);
+  font-size: clamp(23px, 2.9vw, 41px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+/* 日本語ラベルにしたぶん幅を食う。英字セリフのままだと字間が広すぎるので詰める。 */
+.site-nav {
+  gap: 22px;
+  font-family: var(--serif-jp);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.site-nav a[href^="https://"] {
+  font-family: var(--serif-en);
+  font-size: 15px;
+}
+
+@media (max-width: 1180px) {
+  .site-nav {
+    gap: 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title-main {
+    /* 狭い画面では1行に収まらないので折り返しを許す。ただし文節単位で折る。 */
+    word-break: normal;
+    line-break: strict;
+  }
+}
