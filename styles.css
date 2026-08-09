@@ -1628,3 +1628,76 @@ footer > p {
 picture {
   display: contents;
 }
+
+/* ===== 教室を主役にしたヒーロー =====
+   お母様の要望「パッと見て たま結タティングレース教室 と分かる」「教室の窓口をメインに」
+   に対応する追加分。既存のトーン（余白・明朝・くすんだ色）は崩さない。 */
+
+.hero-text {
+  margin-bottom: 22px;
+}
+
+/* 教室の安心材料を3つだけ。読ませるより、目に入ればよい。 */
+.hero-points {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 30px;
+  padding: 0;
+  gap: 8px 10px;
+  list-style: none;
+}
+
+.hero-points li {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--olive);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+/* 唯一の主ボタン。他のリンクは下線のみなので、面で塗るだけで十分に主役になる。 */
+.hero-primary-cta {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 26px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: var(--ink);
+  color: var(--paper-light);
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  transition: background-color 220ms ease, color 220ms ease;
+}
+
+.hero-primary-cta:hover,
+.hero-primary-cta:focus-visible {
+  background: transparent;
+  color: var(--ink);
+}
+
+.hero-primary-cta span {
+  font-size: 12px;
+}
+
+/* LINEに送る心理的ハードル（何を書けばいいか分からない）を先に外す */
+.hero-note {
+  margin: 20px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 900px) {
+  .hero-primary-cta {
+    width: 100%;
+  }
+
+  .hero-points {
+    margin-bottom: 24px;
+  }
+}
