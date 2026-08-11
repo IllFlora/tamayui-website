@@ -1782,6 +1782,8 @@ picture {
   .site-header {
     min-height: 84px;
     padding: 20px 7vw;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   .site-header > .logo,
@@ -1801,6 +1803,10 @@ picture {
 
   .site-nav {
     z-index: 2;
+    inset: 0 auto auto 0;
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100vh;
     align-items: stretch;
     justify-content: flex-start;
     gap: 0;
