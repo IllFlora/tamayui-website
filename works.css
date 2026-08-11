@@ -24,6 +24,22 @@ body {
   font-family: var(--serif-jp);
   font-weight: 300;
   line-height: 1.9;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+p {
+  line-break: strict;
+}
+
+h1,
+h2 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 a {
@@ -51,6 +67,7 @@ img {
   display: flex;
   width: fit-content;
   flex-direction: column;
+  line-height: 1.15;
 }
 
 .gallery-logo span {
@@ -71,6 +88,8 @@ img {
 .gallery-logo small {
   font-family: var(--serif-jp);
   font-size: 7px;
+  margin-top: 5px;
+  line-height: 1.4;
 }
 
 .gallery-header p {
@@ -322,6 +341,10 @@ img {
   .gallery-header {
     grid-template-columns: 1fr auto;
     padding: 20px 6vw;
+  }
+
+  .gallery-closing h2 br {
+    display: none;
   }
 
   .gallery-header p {

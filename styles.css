@@ -25,6 +25,7 @@ body {
   font-family: var(--serif-jp);
   font-weight: 300;
   line-height: 1.9;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -156,6 +157,17 @@ h2 {
   font-weight: 400;
   letter-spacing: 0.09em;
   line-height: 1.55;
+  line-break: strict;
+  text-wrap: balance;
+}
+
+p {
+  line-break: strict;
+  text-wrap: pretty;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 
 h1 {
@@ -1766,9 +1778,190 @@ picture {
     grid-template-columns: 1fr;
   }
 
+  /* このファイル末尾のPC向け指定より後で、モバイル値を確定する。 */
+  .site-header {
+    min-height: 84px;
+    padding: 20px 7vw;
+  }
+
+  .site-header > .logo,
+  .menu-button {
+    z-index: 3;
+  }
+
+  .logo span {
+    font-size: 28px;
+  }
+
+  .logo small {
+    margin-top: 9px;
+    font-size: 8px;
+    letter-spacing: 0.26em;
+  }
+
+  .site-nav {
+    z-index: 2;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 112px 7vw 36px;
+    overflow-y: auto;
+    background: rgba(246, 243, 236, 0.985);
+    font-family: var(--serif-jp);
+    font-size: 19px;
+    letter-spacing: 0.1em;
+  }
+
+  .site-nav a,
+  .site-nav a[href^="https://"] {
+    display: flex;
+    min-height: 56px;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(41, 42, 37, 0.16);
+    font-family: var(--serif-jp);
+    font-size: 18px;
+  }
+
+  .site-nav a[target="_blank"]::after {
+    content: "↗";
+    color: var(--muted);
+    font-family: var(--serif-en);
+    font-size: 14px;
+  }
+
+  .site-nav .nav-shop {
+    position: relative;
+    min-height: 58px;
+    justify-content: center;
+    margin-top: 18px;
+    padding: 0 18px;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper-light);
+    font-size: 16px;
+  }
+
+  .site-nav .nav-shop::after {
+    position: absolute;
+    right: 18px;
+    color: currentColor;
+  }
+
+  .hero-copy {
+    min-height: auto;
+    padding: 132px 7vw 66px;
+  }
+
+  .eyebrow {
+    max-width: 34em;
+    margin-bottom: 24px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    line-height: 1.9;
+  }
+
+  .hero-title {
+    margin-bottom: 24px;
+    gap: 5px;
+  }
+
+  .hero-title-brand {
+    font-size: 34px;
+    letter-spacing: 0.13em;
+  }
+
   .hero-title-main {
-    /* 狭い画面では1行に収まらないので折り返しを許す。ただし文節単位で折る。 */
+    font-size: 25px;
+    letter-spacing: 0.025em;
+    line-height: 1.45;
     word-break: normal;
     line-break: strict;
+  }
+
+  .hero-text {
+    margin-bottom: 24px;
+    font-size: 14px;
+    letter-spacing: 0.035em;
+    line-height: 2;
+  }
+
+  .hero-text br {
+    display: none;
+  }
+
+  .hero-points {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-bottom: 26px;
+  }
+
+  .hero-points li {
+    padding: 8px 4px;
+    font-size: 10.5px;
+    letter-spacing: 0.025em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .hero-actions {
+    display: grid;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .hero-primary-cta {
+    padding: 0 18px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+  }
+
+  .hero-secondary-link {
+    width: min(72%, 240px);
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
+  .hero-note {
+    margin-top: 16px;
+    font-size: 11.5px;
+    letter-spacing: 0.035em;
+    line-height: 2;
+  }
+}
+
+@media (min-width: 901px) {
+  .hero-text {
+    max-width: 46em;
+    font-size: 15px;
+    letter-spacing: 0.045em;
+    line-height: 2;
+  }
+
+  .hero-note {
+    font-size: 12.5px;
+  }
+}
+
+@media (max-width: 380px) {
+  .site-nav {
+    padding-top: 104px;
+  }
+
+  .site-nav a,
+  .site-nav a[href^="https://"] {
+    min-height: 52px;
+    font-size: 17px;
+  }
+
+  .hero-title-main {
+    font-size: 24px;
+  }
+
+  .hero-points li {
+    font-size: 10px;
   }
 }

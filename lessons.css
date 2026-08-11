@@ -24,6 +24,22 @@ body {
   background: var(--paper);
   font-family: var(--serif-jp);
   font-weight: 300;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+p {
+  line-break: strict;
+}
+
+h1,
+h2 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 a {
